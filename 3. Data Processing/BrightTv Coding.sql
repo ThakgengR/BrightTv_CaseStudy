@@ -133,6 +133,22 @@ END AS Time_Of_Day,
 
 `Duration 2` AS Duration,
 
+CASE
+    WHEN date_format(`Duration 2`, 'HH:mm:ss')
+     BETWEEN '00:00:01' AND '00:30:00'
+    THEN '01. Low Usage: <30 min'
+
+    WHEN date_format(`Duration 2`, 'HH:mm:ss')
+         BETWEEN '00:30:01' AND '00:59:59'
+    THEN '02. Medium Usage: <60 min'
+
+    WHEN date_format(`Duration 2`, 'HH:mm:ss')
+         > '00:59:59'
+    THEN '03. High Usage: >60 min'
+
+    ELSE '04. No Usage'
+END AS Screen_Time_Bucket,
+
 hour(RecordDate2) AS Hour_Of_Day
 
 FROM `brightlearn`.`bright_tv`.`viewership`;
